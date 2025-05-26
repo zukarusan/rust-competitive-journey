@@ -4,19 +4,19 @@ use std::fs::File;
 use std::io::{self, BufRead, Write};
 
 /*
- * Complete the 'reverseArray' function below.
+ * Complete the 'reverse_array' function below.
  *
  * The function is expected to return an INTEGER_ARRAY.
  * The function accepts INTEGER_ARRAY a as parameter.
  */
 
-fn reverseArray(a: &[i32]) -> Vec<i32> {
+fn reverse_array(a: &[i32]) -> Vec<i32> {
     let mut rev = a.to_vec();
     rev.reverse();
     rev
 }
 
-fn main() {
+pub fn main() {
     let stdin = io::stdin();
     let mut stdin_iterator = stdin.lock().lines();
 
@@ -30,7 +30,7 @@ fn main() {
         .map(|s| s.to_string().parse::<i32>().unwrap())
         .collect();
 
-    let res = reverseArray(&arr);
+    let res = reverse_array(&arr);
     println!("{}", &arr[0]);
 
     for i in 0..res.len() {
