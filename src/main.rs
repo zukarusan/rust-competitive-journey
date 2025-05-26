@@ -13,7 +13,7 @@ fn main() {
 }
 
 fn _main() -> bool {
-    println!();
+    println!("================================================");
     println!("Select what to do:");
     println!("1. Load problem from URL");
     println!("q. Exit");
