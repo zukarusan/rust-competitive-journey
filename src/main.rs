@@ -8,25 +8,29 @@ enum Opt {
 fn main()  {
     println!("Welcome to your Rust competitive journey");
     loop {
-        println!();
-        println!("Select what to do:");
-        println!("1. Load problem from URL");
-        println!("q. Exit");
-        let stdin = io::stdin();
-        let mut iter_in = stdin.lock().lines();
-        
-        let opt = match get_option(&mut iter_in) {
-            Some(o) => o,
-            None => {
-                println!("Please select one of the options only.");
-                continue;
-            }
-        };
-        match opt {
-            Opt::Load => do_load(),
-            Opt::Exit => break
+        _ = !_main() && break;
+    };
+}
+
+fn _main() -> bool {
+    println!();
+    println!("Select what to do:");
+    println!("1. Load problem from URL");
+    println!("q. Exit");
+    let stdin = io::stdin();
+    let mut iter_in = stdin.lock().lines();
+    
+    let opt = match get_option(&mut iter_in) {
+        Some(o) => o,
+        None => {
+            println!("Please select one of the options only.");
+            return true;
         }
     };
+    match opt {
+        Opt::Load => (do_load(), true).1,
+        Opt::Exit => false
+    }
 }
 
 fn get_option(iter_in: &mut Lines<StdinLock<'static>>) -> Option<Opt> {
