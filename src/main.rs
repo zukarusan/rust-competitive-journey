@@ -1,4 +1,4 @@
-use std::io::{self, stdout, BufRead, Lines, StdinLock, Write};
+use std::io::{self, stdout, BufRead, Write};
 
 enum Opt {
     Load,
