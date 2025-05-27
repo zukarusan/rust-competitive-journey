@@ -1,0 +1,12 @@
+{
+    "rust-analyzer.server.extraEnv": {
+        "OUTPUT_PATH": "target/out.txt"
+    },
+    "terminal.integrated.env.windows": {
+        "OUTPUT_PATH": "target/out.txt"
+    },
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "rust-analyzer.runnables.extraEnv": {
+        "OUTPUT_PATH": "target/out.txt"
+    }
+}

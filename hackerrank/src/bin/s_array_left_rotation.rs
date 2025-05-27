@@ -18,7 +18,7 @@ fn rotate_left(d: i32, arr: &[i32]) -> Vec<i32> {
     let len = arr.len();
     let mut shift = vec![0; len];
     for i in 0..len {
-        shift[i] = arr[modulo(i as i32 - d, len)];
+        shift[modulo(i as i32 - d, len)] = arr[i];
     }
     shift
 }
