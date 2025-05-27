@@ -6,3 +6,6 @@ edition = "2024"
 
 [dependencies]
 list-modules = "0.1.6"
+
+[workspace]
+members = ["hackerrank", "leetcode"]

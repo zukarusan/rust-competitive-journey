@@ -1,5 +1,4 @@
 use std::{collections::HashSet, hash::Hash, io::{self, stdout, BufRead, Write}};
-use rust_competitive_journey::hackerrank;
 
 fn vec_to_set<T>(vec: Vec<T>) -> HashSet<T> where T: Eq + Hash {
     HashSet::from_iter(vec)
@@ -55,20 +54,20 @@ fn do_run_solution() -> Option<bool> {
     })
 }
 fn do_run_solution_hackerrank() -> Option<bool> {
-    for m in hackerrank::LIST {
-        println!("{}", m);
-    }
-    print!("Type solution to run > ");
-    stdout().flush().ok()?;
-    let stdin = io::stdin();
-    let mut iter_in = stdin.lock().lines();
-    let name = iter_in.next()?.ok()?;
+    // for m in hackerrank::LIST {
+    //     println!("{}", m);
+    // }
+    // print!("Type solution to run > ");
+    // stdout().flush().ok()?;
+    // let stdin = io::stdin();
+    // let mut iter_in = stdin.lock().lines();
+    // let name = iter_in.next()?.ok()?;
 
-    let names = vec_to_set(hackerrank::LIST.to_vec());
-    if !names.contains(name.as_str()) {
-        println!("There's no solution named {}", name);
-        return Some(false);
-    }
+    // let names = vec_to_set(hackerrank::LIST.to_vec());
+    // if !names.contains(name.as_str()) {
+    //     println!("There's no solution named {}", name);
+    //     return Some(false);
+    // }
 
     // TODO
     

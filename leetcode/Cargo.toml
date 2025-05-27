@@ -1,0 +1,5 @@
+[package]
+name = "leetcode"
+authors = ["zook <me@nabilasykar.my.id>"]
+version = "0.1.0"
+edition = "2024"

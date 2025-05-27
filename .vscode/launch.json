@@ -7,6 +7,24 @@
         {
             "type": "lldb",
             "request": "launch",
+            "name": "Launch",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=",
+                    "--package=rust-competitive-journey"
+                ],
+                "filter": {
+                    "name": "rust-competitive-journey",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
             "name": "Debug unit tests in library 'rust_competitive_journey'",
             "cargo": {
                 "args": [
@@ -27,6 +45,24 @@
             "type": "lldb",
             "request": "launch",
             "name": "Debug executable 'rust-competitive-journey'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=rust-competitive-journey",
+                    "--package=rust-competitive-journey"
+                ],
+                "filter": {
+                    "name": "rust-competitive-journey",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug hackerrank",
             "cargo": {
                 "args": [
                     "build",
