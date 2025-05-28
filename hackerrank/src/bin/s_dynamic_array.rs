@@ -1,3 +1,4 @@
+// https://www.hackerrank.com/challenges/dynamic-array/problem?isFullScreen=true
 use std::env;
 use std::fs::File;
 use std::io::{self, BufRead, Write};
