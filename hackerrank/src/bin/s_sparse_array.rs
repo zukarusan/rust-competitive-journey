@@ -30,6 +30,10 @@ fn matching_strings(string_list: &[String], queries: &[String]) -> Vec<i32> {
     answers
 }
 
+fn matching_strings_v2() {
+    
+}
+
 fn main() {
     let stdin = io::stdin();
     let mut stdin_iterator = stdin.lock().lines();
