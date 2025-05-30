@@ -1,6 +1,6 @@
 // https://www.hackerrank.com/challenges/crush/problem?isFullScreen=true
 
-use std::env;
+use std::{env, vec};
 use std::fs::File;
 use std::io::{self, BufRead, Write};
 
@@ -12,18 +12,42 @@ use std::io::{self, BufRead, Write};
  *  1. INTEGER n
  *  2. 2D_INTEGER_ARRAY queries
  */
-
+fn has_intersection(first: (i32, i32), second: (i32, i32)) -> bool {
+    return first.0 <= second.1 && first.1 >= second.0;
+}
+fn split_intersection(range: (i32, i32), val: i64, by_range: (i32, i32), k: i64) -> Vec<((i32, i32), i64)> {
+    let mut splits:Vec<((i32, i32), i64)> = vec![];
+    let intersected = (range.0.min(by_range.0), range.1.min(by_range.1));
+    if range.0 < intersected.0 {
+        splits.push(((range.0, intersected.0-1), val));
+    }
+    if range.1 > intersected.1 {
+        splits.push(((intersected.1+1, range.1), val));
+    }
+    splits.push((intersected, val + k));
+    splits
+}
 fn array_manipulation(n: i32, queries: &[Vec<i32>]) -> i64 {
-    let mut arr = vec![0i64; n as usize];
+    let mut stack = vec![];
+    let mut result: Vec<((i32, i32), i64)> = vec![];
+    stack.push(((1, n), 0i64));
     for q in queries {
-        let a = q[0] as usize;
-        let b = q[1] as usize;
+        let range = (q[0], q[1]);
         let k = q[2] as i64;
-        for i in a-1..=b-1 {
-            arr[i] += k;
+        stack.append(&mut result);
+        while let Some(top) = stack.pop() {
+            if !has_intersection(range, top.0) {
+                result.push(top);
+                continue;
+            }
+            let res = split_intersection(top.0, top.1, range, k);
+            result.extend(res);
         }
     }
-    *arr.iter().max().unwrap_or(&0i64)
+    result.iter()
+        .map(|x| x.1)
+        .max()
+        .unwrap_or(0)
 }
 
 fn main() {
