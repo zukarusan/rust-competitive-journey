@@ -2,7 +2,7 @@
 
 use std::env;
 use std::fs::File;
-use std::io::{self, BufRead, Write};
+use std::io::{self, BufRead, BufReader, Write};
 
 /*
  * Complete the 'array_manipulation' function below.
@@ -14,21 +14,28 @@ use std::io::{self, BufRead, Write};
  */
 
 fn array_manipulation(n: i32, queries: &[Vec<i32>]) -> i64 {
-    let mut arr = vec![0i64; n as usize];
+    let _n = n as usize;
+    let mut arr = vec![0i64; _n];
     for q in queries {
-        let a = q[0] as usize;
-        let b = q[1] as usize;
+        let (a, b) = (q[0] as usize, q[1] as usize);
         let k = q[2] as i64;
-        for i in a-1..=b-1 {
-            arr[i] += k;
+        arr[a-1] += k;
+        if b < _n {
+            arr[b] -= k;
         }
     }
-    *arr.iter().max().unwrap_or(&0i64)
+    let (mut cur_val, mut max) = (0, 0);
+    for change in arr {
+        cur_val += change;
+        max = max.max(cur_val);
+    }
+    max
+
 }
 
 fn main() {
-    let stdin = io::stdin();
-    let mut stdin_iterator = stdin.lock().lines();
+    let stdin = BufReader::new(File::open("target/s_crush_in.txt").unwrap());
+    let mut stdin_iterator = stdin.lines();
 
     let mut fptr = File::create(env::var("OUTPUT_PATH").unwrap()).unwrap();
 
