@@ -34,7 +34,7 @@ fn array_manipulation(n: i32, queries: &[Vec<i32>]) -> i64 {
 }
 
 fn main() {
-    let stdin = BufReader::new(File::open("target/s_crush_in.txt").unwrap());
+    let stdin = BufReader::new(File::open("inputs/s_crush_in.txt").unwrap());
     let mut stdin_iterator = stdin.lines();
 
     let mut fptr = File::create(env::var("OUTPUT_PATH").unwrap()).unwrap();
