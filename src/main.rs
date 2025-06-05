@@ -1,6 +1,6 @@
-use std::{collections::HashSet, hash::Hash, io::{self, stdout, BufRead, Write}, process::Command};
+use std::{collections::HashSet, hash::Hash, io::{self, stdout, BufRead, Stdin, Write}, process::Command};
 
-use rust_competitive_journey::hackerrank;
+use rust_competitive_journey::{hackerrank, platform_from_url, Platform};
 
 fn vec_to_set<T>(vec: Vec<T>) -> HashSet<T> where T: Eq + Hash {
     HashSet::from_iter(vec)
@@ -8,7 +8,7 @@ fn vec_to_set<T>(vec: Vec<T>) -> HashSet<T> where T: Eq + Hash {
 fn main() {
     println!("Welcome to your Rust competitive journey");
     loop {
-        _ = _main() && break;
+        _ = !_main() && break;
     };
 }
 
@@ -19,58 +19,74 @@ fn _main() -> bool {
     println!("1. Load problem from URL");
     println!("2. Run solution");
     println!("q. Exit");
-    
-    let opt = get_option().unwrap_or_default();
-    match opt.as_str() {
-        "1" => (do_load_problem(), false).1,
-        "2" => do_run_solution().unwrap_or(false),
-        "q" => true,
-        _ => (println!("Please select one of the options only."), false).1
+    let stdin = io::stdin();
+    let opt = get_option(&stdin).unwrap_or_default();
+    let res = match opt.as_str() {
+        "1" => do_load_problem(&stdin).map(|_| true),
+        "2" => do_run_solution(&stdin).map(|_| true),
+        "q" => Ok(false),
+        _ => Err("Please select one of the options only.".to_string())
+    };
+    match res {
+        Err(msg) => (println!("{}", msg), true).1,
+        Ok(still_run) => still_run
     }
 }
 
-fn get_option() -> Option<String> {
-    print!("> ");
-    stdout().flush().ok()?;
-    let stdin = io::stdin();
-    let mut iter_in = stdin.lock().lines();
-    iter_in.next()?.ok()
+fn input(stdin: &Stdin) -> Result<String, String> {
+    Ok(stdin.lock()
+            .lines()
+            .next()
+            .ok_or("FATAL: iter finished")?
+            .map_err(|_| "FATAL: iter next error")?
+    )
 }
 
-fn do_load_problem() {
-    println!("test")
+fn get_option(stdin: &Stdin) -> Option<String> {
+    print!("> ");
+    stdout().flush().ok()?;
+    input(stdin).ok()
 }
-fn do_run_solution() -> Option<bool> {
+
+fn do_load_problem(stdin: &Stdin) -> Result<(), String> {
+    print!("Input URL > ");
+    stdout().flush().map_err(|_| "can't flush")?;
+
+    let url = input(stdin)?;
+    let Some(platform) = platform_from_url(&url) else {
+        return Err("URL not supported".to_string());
+    };
+
+    match platform {
+        Platform::Hackerrank => hackerrank::load_problem(),
+        Platform::Leetcode => Err("Platform not implemented".to_string())
+    }
+    
+}
+fn do_run_solution(stdin: &Stdin) -> Result<(), String> {
     println!("Select module:");
     println!("1. HackerRank");
     print!("> ");
-    stdout().flush().ok()?;
-    let stdin = io::stdin();
-    let opt = {
-        let mut iter_in = stdin.lock().lines();
-        iter_in.next()?.ok()?
-    };
-    Some(match opt.as_str() {
-        "1" => do_run_solution_hackerrank().unwrap_or(false),
-        _ => (println!("Invalid module"), false).1
-    })
+    stdout().flush().map_err(|_| "can't flush")?;
+
+    let opt = input(&stdin)?;
+    match opt.as_str() {
+        "1" => do_run_solution_hackerrank(),
+        _ => Err("Invalid module".to_string()),
+    }
 }
-fn do_run_solution_hackerrank() -> Option<bool> {
+fn do_run_solution_hackerrank() -> Result<(), String> {
     for m in hackerrank::LIST {
         println!("{}", m);
     }
     print!("Type solution to run > ");
-    stdout().flush().ok()?;
+    stdout().flush().map_err(|_| "can't flush")?;
     let stdin = io::stdin();
-    let name = {
-        let mut iter_in = stdin.lock().lines();
-        iter_in.next()?.ok()?
-    };
+    let name = input(&stdin)?;
 
     let names = vec_to_set(hackerrank::LIST.to_vec());
     if !names.contains(name.as_str()) {
-        println!("There's no solution named {}", name);
-        return Some(false);
+        return Err(format!("There's no solution named {}", name.to_string()));
     }
 
     let handle = Command::new("cargo")
@@ -82,5 +98,5 @@ fn do_run_solution_hackerrank() -> Option<bool> {
         .spawn()
         .expect("Failed to run solution");
     
-    Some(true)
+    Ok(())
 }

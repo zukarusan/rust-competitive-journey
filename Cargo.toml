@@ -6,6 +6,7 @@ edition = "2024"
 
 [dependencies]
 list-modules = "0.1.6"
+regex = "1.11.1"
 
 [workspace]
 members = ["hackerrank", "leetcode"]
