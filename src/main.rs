@@ -35,10 +35,10 @@ fn _main() -> bool {
 
 fn input(stdin: &Stdin) -> Result<String, String> {
     Ok(stdin.lock()
-            .lines()
-            .next()
-            .ok_or("FATAL: iter finished")?
-            .map_err(|_| "FATAL: iter next error")?
+        .lines()
+        .next()
+        .ok_or("FATAL: iter finished")?
+        .map_err(|_| "FATAL: iter next error")?
     )
 }
 

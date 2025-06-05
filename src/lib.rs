@@ -1,7 +1,7 @@
 pub mod hackerrank;
 pub mod leetcode;
 use regex::Regex;
-
+pub const OK: Result<(), String> = Ok(());
 pub enum Platform {
     Hackerrank,
     Leetcode
