@@ -1,6 +1,6 @@
 use std::{collections::HashSet, hash::Hash, io::{self, stdout, BufRead, Stdin, Write}, process::Command};
 
-use rust_competitive_journey::{hackerrank, platform_from_url, Platform};
+use rust_competitive_journey::{error::{AsError, AsErrorResult, IntoError, MessageError}, hackerrank, platform_from_url, Platform, Res};
 
 fn vec_to_set<T>(vec: Vec<T>) -> HashSet<T> where T: Eq + Hash {
     HashSet::from_iter(vec)
@@ -25,7 +25,7 @@ fn _main() -> bool {
         "1" => do_load_problem(&stdin).map(|_| true),
         "2" => do_run_solution(&stdin).map(|_| true),
         "q" => Ok(false),
-        _ => Err("Please select one of the options only.".to_string())
+        _ => "Please select one of the options only.".into_err()
     };
     match res {
         Err(msg) => (println!("{}", msg), true).1,
@@ -33,13 +33,12 @@ fn _main() -> bool {
     }
 }
 
-fn input(stdin: &Stdin) -> Result<String, String> {
-    Ok(stdin.lock()
+fn input(stdin: &Stdin) -> Result<String, MessageError> {
+    stdin.lock()
         .lines()
         .next()
-        .ok_or("FATAL: iter finished")?
-        .map_err(|_| "FATAL: iter next error")?
-    )
+        .as_err("FATAL: iter finished")?
+        .wrap_err()
 }
 
 fn get_option(stdin: &Stdin) -> Option<String> {
@@ -48,48 +47,48 @@ fn get_option(stdin: &Stdin) -> Option<String> {
     input(stdin).ok()
 }
 
-fn do_load_problem(stdin: &Stdin) -> Result<(), String> {
+fn do_load_problem(stdin: &Stdin) -> Res {
     print!("Input URL > ");
-    stdout().flush().map_err(|_| "can't flush")?;
+    stdout().flush().wrap_err()?;
 
     let url = input(stdin)?;
     let Some(platform) = platform_from_url(&url) else {
-        return Err("URL not supported".to_string());
+        return "URL not supported".into_err();
     };
 
     match platform {
-        Platform::Hackerrank => hackerrank::load_problem(),
-        Platform::Leetcode => Err("Platform not implemented".to_string())
+        Platform::Hackerrank => hackerrank::load_problem(&url),
+        Platform::Leetcode => "Platform not implemented".into_err()
     }
     
 }
-fn do_run_solution(stdin: &Stdin) -> Result<(), String> {
+fn do_run_solution(stdin: &Stdin) -> Res {
     println!("Select module:");
     println!("1. HackerRank");
     print!("> ");
-    stdout().flush().map_err(|_| "can't flush")?;
+    stdout().flush().wrap_err()?;
 
     let opt = input(&stdin)?;
     match opt.as_str() {
         "1" => do_run_solution_hackerrank(),
-        _ => Err("Invalid module".to_string()),
+        _ => "Invalid module".into_err(),
     }
 }
-fn do_run_solution_hackerrank() -> Result<(), String> {
+fn do_run_solution_hackerrank() -> Res {
     for m in hackerrank::LIST {
         println!("{}", m);
     }
     print!("Type solution to run > ");
-    stdout().flush().map_err(|_| "can't flush")?;
+    stdout().flush().wrap_err()?;
     let stdin = io::stdin();
     let name = input(&stdin)?;
 
     let names = vec_to_set(hackerrank::LIST.to_vec());
     if !names.contains(name.as_str()) {
-        return Err(format!("There's no solution named {}", name.to_string()));
+        return format!("There's no solution named {name}").into_err();
     }
 
-    let handle = Command::new("cargo")
+    let _handle = Command::new("cargo")
         .args([
             "run",
             "-p", "hackerrank",

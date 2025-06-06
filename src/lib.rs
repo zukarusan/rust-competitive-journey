@@ -1,7 +1,11 @@
 pub mod hackerrank;
 pub mod leetcode;
+pub mod error;
+use crate::error::MessageError;
 use regex::Regex;
-pub const OK: Result<(), String> = Ok(());
+
+pub type Res = Result<(), MessageError>;
+pub const OK: Res = Ok(());
 pub enum Platform {
     Hackerrank,
     Leetcode
