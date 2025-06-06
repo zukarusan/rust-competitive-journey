@@ -1,10 +1,8 @@
-use std::{collections::HashSet, hash::Hash, io::{self, stdout, BufRead, Stdin, Write}, process::Command};
+use std::{io::{self, stdout, Stdin, Write}};
 
-use rust_competitive_journey::{error::{AsError, AsErrorResult, IntoError, MessageError}, hackerrank, platform_from_url, Platform, Res};
+use rust_competitive_journey::{error::{AsErrorResult, IntoError}, hackerrank, input, platform_from_url, Platform, Res};
 
-fn vec_to_set<T>(vec: Vec<T>) -> HashSet<T> where T: Eq + Hash {
-    HashSet::from_iter(vec)
-}
+
 fn main() {
     println!("Welcome to your Rust competitive journey");
     loop {
@@ -33,13 +31,6 @@ fn _main() -> bool {
     }
 }
 
-fn input(stdin: &Stdin) -> Result<String, MessageError> {
-    stdin.lock()
-        .lines()
-        .next()
-        .as_err("FATAL: iter finished")?
-        .wrap_err()
-}
 
 fn get_option(stdin: &Stdin) -> Option<String> {
     print!("> ");
@@ -68,34 +59,9 @@ fn do_run_solution(stdin: &Stdin) -> Res {
     print!("> ");
     stdout().flush().wrap_err()?;
 
-    let opt = input(&stdin)?;
+    let opt = input(stdin)?;
     match opt.as_str() {
-        "1" => do_run_solution_hackerrank(),
+        "1" => hackerrank::run_solution(stdin),
         _ => "Invalid module".into_err(),
     }
-}
-fn do_run_solution_hackerrank() -> Res {
-    for m in hackerrank::LIST {
-        println!("{}", m);
-    }
-    print!("Type solution to run > ");
-    stdout().flush().wrap_err()?;
-    let stdin = io::stdin();
-    let name = input(&stdin)?;
-
-    let names = vec_to_set(hackerrank::LIST.to_vec());
-    if !names.contains(name.as_str()) {
-        return format!("There's no solution named {name}").into_err();
-    }
-
-    let _handle = Command::new("cargo")
-        .args([
-            "run",
-            "-p", "hackerrank",
-            "--bin", name.as_str()
-        ])
-        .spawn()
-        .expect("Failed to run solution");
-    
-    Ok(())
 }
