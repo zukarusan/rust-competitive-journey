@@ -24,5 +24,6 @@ pub fn run_solution(stdin: &Stdin) -> Res {
         .spawn()
         .expect("Failed to run solution");
     
-    Ok(())
+
+    "Running solution is not yet implemented".into_err()
 }
