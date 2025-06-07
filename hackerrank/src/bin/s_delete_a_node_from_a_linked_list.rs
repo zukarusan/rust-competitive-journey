@@ -18,7 +18,8 @@ fn main() {
     }
     let p = stdin_iterator.next().unwrap().unwrap().trim().parse::<usize>().unwrap();
 
-    let mut tail = list.split_off(p).split_off(1);
+    let mut tail = list.split_off(p);
+    tail.pop_front();
     list.append(&mut tail);
 
     let mut sep = "";
