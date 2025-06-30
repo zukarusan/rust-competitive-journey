@@ -14,7 +14,7 @@ use std::io::{self, BufRead, Write};
  */
 
 fn hurdle_race(k: i32, height: &[i32]) -> i32 {
-    (height.iter().max().unwrap_or(0) - k).max(0)
+    (height.iter().max().unwrap_or(&0) - k).max(0)
 }
 
 fn main() {
