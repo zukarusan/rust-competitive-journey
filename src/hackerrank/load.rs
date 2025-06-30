@@ -25,7 +25,6 @@ pub fn load_problem(url: &str) -> Res {
 
     writeln!(&mut file, "// {}", url).wrap_err()?;
     writeln!(&mut file).wrap_err()?;
-    writeln!(&mut file).wrap_err()?;
     
     OK
 }
