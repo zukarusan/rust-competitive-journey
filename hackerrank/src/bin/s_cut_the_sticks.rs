@@ -1,5 +1,6 @@
 // https://www.hackerrank.com/challenges/cut-the-sticks/problem?isFullScreen=true
 
+use std::collections::VecDeque;
 use std::env;
 use std::fs::File;
 use std::io::{self, BufRead, Write};
@@ -12,7 +13,21 @@ use std::io::{self, BufRead, Write};
  */
 
 fn cut_the_sticks(arr: &[i32]) -> Vec<i32> {
-
+    let mut sticks = arr.to_vec();
+    sticks.sort_unstable();
+    let mut results = vec![];
+    let mut prev = 0;
+    let n = sticks.len();
+    let mut i = 0;
+    while i < n {
+        let cur = sticks[i];
+        if cur != prev {
+            results.push((n-i) as i32);
+        }
+        i += 1;
+        prev = cur;
+    }
+    results
 }
 
 fn main() {
