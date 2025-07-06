@@ -5,7 +5,7 @@ use std::fs::File;
 use std::io::{self, BufRead, Write};
 
 /*
- * Complete the 'libraryFine' function below.
+ * Complete the 'library_fine' function below.
  *
  * The function is expected to return an INTEGER.
  * The function accepts following parameters:
@@ -17,8 +17,16 @@ use std::io::{self, BufRead, Write};
  *  6. INTEGER y2
  */
 
-fn libraryFine(d1: i32, m1: i32, y1: i32, d2: i32, m2: i32, y2: i32) -> i32 {
-
+fn library_fine(d1: i32, m1: i32, y1: i32, d2: i32, m2: i32, y2: i32) -> i32 {
+    if y1 < y2 || (m1 < m2 && y1 == y2) || (d1 <= d2 && m1 == m2 && y1 == y2) {
+        0
+    } else if m1 == m2 && y1 == y2 {
+        (d1 - d2) * 15  
+    } else if y1 == y2 {
+        (m1 - m2) * 500
+    } else {
+        10000
+    }
 }
 
 fn main() {
@@ -49,7 +57,7 @@ fn main() {
 
     let y2 = second_multiple_input[2].trim().parse::<i32>().unwrap();
 
-    let result = libraryFine(d1, m1, y1, d2, m2, y2);
+    let result = library_fine(d1, m1, y1, d2, m2, y2);
 
     writeln!(&mut fptr, "{}", result).ok();
 }
