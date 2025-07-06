@@ -12,7 +12,16 @@ use std::io::{self, BufRead, Write};
  */
 
 fn find_digits(n: i32) -> i32 {
-
+    let mut _n = n;
+    let mut count = 0;
+    while _n != 0 {
+        let d = _n % 10;
+        if d != 0 && n % d == 0 {
+            count += 1;
+        }
+        _n /= 10;
+    }
+    count
 }
 
 fn main() {
